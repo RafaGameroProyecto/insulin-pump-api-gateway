@@ -78,9 +78,7 @@ eureka.instance.prefer-ip-address=true
    - Device Service (8082)
    - Reading Service (8083)
 3. Ejecutar el Gateway:
-```bash
-mvn spring-boot:run
-```
+
 4. Acceder a: [http://localhost:8087](http://localhost:8087)
 
 ---
@@ -110,93 +108,7 @@ GET http://localhost:8087/api/readings/requiring-action
 
 ---
 
-## 🔄 Load Balancing
 
-- **Round Robin** por defecto  
-- Descubrimiento con Eureka  
-- Health Check automático  
-- Soporte para múltiples instancias:
-
-```bash
-java -jar patient-service.jar --server.port=8081
-java -jar patient-service.jar --server.port=8091
-java -jar patient-service.jar --server.port=8092
-```
-
----
-
-## 🛡️ Seguridad
-
-### Rate Limiting (futuro)
-```yaml
-filters:
-  - name: RequestRateLimiter
-    args:
-      redis-rate-limiter.replenishRate: 10
-      redis-rate-limiter.burstCapacity: 20
-```
-
----
-
-## 📊 Métricas y Monitoreo
-
-- Health Check:  
-  `GET /actuator/health`
-
-- Métricas:  
-  `GET /actuator/metrics`
-
-- Información de rutas:  
-  `GET /actuator/gateway/routes`
-
----
-
-## 🔧 Configuración Avanzada
-
-### Timeouts
-```yaml
-spring:
-  cloud:
-    gateway:
-      httpclient:
-        connect-timeout: 5000
-        response-timeout: 30s
-```
-
-### Retry Policy
-```yaml
-filters:
-  - name: Retry
-    args:
-      retries: 3
-      methods: GET,POST
-```
-
-### Circuit Breaker (futuro)
-```yaml
-filters:
-  - name: CircuitBreaker
-    args:
-      name: patientServiceCB
-      fallbackUri: forward:/fallback/patients
-```
-
----
-
-## 📝 Logging
-
-### Configuración
-```properties
-logging.level.org.springframework.cloud.gateway=DEBUG
-logging.level.reactor.netty=DEBUG
-logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
-```
-
-### Logs Importantes
-- Peticiones entrantes/salientes
-- Errores de enrutamiento
-- Tiempos de respuesta
-- Estado de servicios
 
 ---
 
